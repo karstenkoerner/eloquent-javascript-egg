@@ -1,47 +1,49 @@
 
 
-
+// TODO: Fix bug with numeric values which have word characters directly after them, for example "123abc". Currently it returns as a value rather than a word, but "123abc" should be considered a word, as it can be used as a variable name.
 
 const program = "123 whatever";
 
 
-function parseExpression(expression) {
+function parseExpression(program) {
     
-    if (/^[0-9]$/.test(expression[0])) {
+    if (/^[0-9]$/.test(program[0])) {
         let i = 0;
 
-        while (i < expression.length && /^[0-9]$/.test(expression[i])) {
+        while (i < program.length && /^[0-9]$/.test(program[i])) {
             i++;
         }
 
         const expr = {
                 type: "value",
-                value: Number(expression.slice(0, i))
+                value: Number(program.slice(0, i))
         };
-        const rest = expression.slice(i);
+        const rest = program.slice(i);
 
         return { expr, rest };
-    } else if (expression[0] === '"') {
+    } else if (program[0] === '"') {
         let i = 1;
 
-        while (i < expression.length && expression[i] !== '"') {
+        while (i < program.length && program[i] !== '"') {
             i++;
         }
 
-        if (i === expression.length) {
+        if (i === program.length) {
             throw new SyntaxError("Unterminated string literal");
         }
 
         const expr = {
             type: "value",
-            value: expression.slice(1, i)
+            value: program.slice(1, i)
         }
 
         i++;
 
-        const rest = expression.slice(i);
+        const rest = program.slice(i);
 
         return { expr, rest };
+    } else {
+        // Word handling more complicated because of variables and operators
     }
 }
 
