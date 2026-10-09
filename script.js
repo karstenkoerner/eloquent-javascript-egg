@@ -6,6 +6,8 @@
 const program = "123 whatever";
 
 
+
+
 function parseExpression(program) {
     let expr = {};
     let rest = "";
@@ -71,7 +73,15 @@ function parseExpression(program) {
 
     rest = program.slice(i);
 
-    return { expr, rest };
+    return { expr, rest }; // This will eventually return parseApply(expr, rest) which in turn calls parseExpression() recursively until the entire program has been parsed into an AST structure.
 }
 
-parseExpression(program);
+
+function parseApply(expr, rest) {
+
+}
+
+
+function skipSpace() {
+
+}
