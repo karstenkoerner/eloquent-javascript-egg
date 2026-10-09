@@ -52,6 +52,26 @@ function parseExpression(program) {
 
         return { expr, rest };
     }
+
+    // Words
+    let i = 0;
+
+    while (i < program.length && !/[\s(),#"]/.test(program[i])) {
+        i++;
+    }
+
+    if (i === 0) {
+        throw new SyntaxError("Unexpected syntax: " + program);
+    }
+
+    expr = {
+        type: "word",
+        name: program.slice(0, i)
+    }
+
+    rest = program.slice(i);
+
+    return { expr, rest };
 }
 
 parseExpression(program);
