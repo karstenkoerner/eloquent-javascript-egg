@@ -27,7 +27,7 @@ function parseExpression(program) {
             };
             rest = program.slice(i);
 
-            return { expr, rest };
+            return parseApply(expr, rest);
         }
     }
     
@@ -52,7 +52,7 @@ function parseExpression(program) {
 
         rest = program.slice(i);
 
-        return { expr, rest };
+        return parseApply(expr, rest);
     }
 
     // Words
@@ -73,15 +73,24 @@ function parseExpression(program) {
 
     rest = program.slice(i);
 
-    return { expr, rest }; // This will eventually return parseApply(expr, rest) which in turn calls parseExpression() recursively until the entire program has been parsed into an AST structure.
+    console.log({expr: expr, rest: rest})
+    return parseApply(expr, rest);
 }
 
 
 function parseApply(expr, rest) {
-
+    const newRest = skipSpace(rest);
 }
 
 
-function skipSpace() {
+function skipSpace(string) {
+    for (let i = 0; i < string.length; i++) {
+        if (/\s/.test(string[i])) {
+            continue;
+        } else {
+            return string.slice(i);
+        }
+    }
 
+    return "";
 }
