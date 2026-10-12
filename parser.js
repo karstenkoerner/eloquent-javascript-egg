@@ -3,12 +3,12 @@
 
 
 
-const program = "123 whatever";
 
 
 
 
 function parseExpression(program) {
+    program = skipSpace(program);
     let expr = {};
     let rest = "";
     
@@ -73,13 +73,48 @@ function parseExpression(program) {
 
     rest = program.slice(i);
 
-    console.log({expr: expr, rest: rest})
     return parseApply(expr, rest);
 }
 
 
 function parseApply(expr, rest) {
     const newRest = skipSpace(rest);
+    
+    if (newRest[0] === "(") {
+        const applyNode = {
+            type: "apply",
+            operator: expr,
+            args: []
+        }
+
+        let remaining = skipSpace(newRest.slice(1));
+
+        while (remaining[0] !== ")") {
+            if (remaining.length === 0) {
+                throw new SyntaxError("Missing closing parenthesis");
+            }
+
+            const result = parseExpression(remaining);
+
+            applyNode.args.push(result.expr);
+            remaining = skipSpace(result.rest);
+
+            if (remaining[0] === ",") {
+                remaining = skipSpace(remaining.slice(1));
+
+                if (remaining.length === 0 || remaining[0] === ")") {
+                    throw new SyntaxError("Expected argument after comma");
+                }
+            } else if (remaining[0] !== ")") {
+                throw new SyntaxError("Expected ',' or ')'");
+            }
+        }
+
+        remaining = remaining.slice(1);
+        return parseApply(applyNode, remaining);
+    } else {
+        return { expr, rest: newRest };
+    }
 }
 
 
@@ -94,3 +129,5 @@ function skipSpace(string) {
 
     return "";
 }
+
+module.exports = { parseExpression };
