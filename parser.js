@@ -130,4 +130,17 @@ function skipSpace(string) {
     return "";
 }
 
-module.exports = { parseExpression };
+
+function parse(program) {
+    const result = parseExpression(program);
+
+    if (result.rest.length > 0) {
+        throw new SyntaxError(
+            "Unexpected text after expression: " + result.rest
+        );
+    }
+
+    return result.expr;
+}
+
+module.exports = { parse, parseExpression };
