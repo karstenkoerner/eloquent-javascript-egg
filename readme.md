@@ -13,6 +13,24 @@ Egg is a toy programming language used to explore how programming languages are 
 
 This implementation is based on the requirements described in *Eloquent JavaScript*, but the implementation is written by me as an exercise in designing the parser and interpreter myself.
 
+## Example Code
+
+```javascript
+do(
+    define(makeMultiplier, fun(factor,
+        fun(number,
+            *(number, factor)
+        )
+    )),
+
+    define(double, makeMultiplier(2)),
+    define(triple, makeMultiplier(3)),
+
+    print(double(10)),
+    print(triple(10))
+)
+```
+
 
 
 ## Requirements / Blueprint
@@ -31,7 +49,7 @@ The program consists of two primary systems:
 
 
 
-## Running the Project
+## Running an Egg Program
 
 Requires Node.js.
 
