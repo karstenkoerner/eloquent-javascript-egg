@@ -1,4 +1,5 @@
-
+// Parser currently does not support negative integers, decimals, escaped quotation marks, or comments.
+// May or may not add those features at a later date.
 
 
 
@@ -130,4 +131,17 @@ function skipSpace(string) {
     return "";
 }
 
-module.exports = { parseExpression };
+
+function parse(program) {
+    const result = parseExpression(program);
+
+    if (result.rest.length > 0) {
+        throw new SyntaxError(
+            "Unexpected text after expression: " + result.rest
+        );
+    }
+
+    return result.expr;
+}
+
+module.exports = { parse, parseExpression };
