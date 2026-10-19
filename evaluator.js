@@ -112,17 +112,4 @@ function run(program) {
 
 
 
-
-
-
-// Nested program
-console.log(run(`
-        do(
-            define(x, 10),
-            define(y, +(x, 5)),
-            *(x, y)
-        )
-`));
-
-
-module.exports = { evaluate };
+module.exports = { run, evaluate };
