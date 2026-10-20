@@ -1,0 +1,13 @@
+do(
+    define(makeMultiplier, fun(factor,
+        fun(number,
+            *(number, factor)
+        )
+    )),
+
+    define(double, makeMultiplier(2)),
+    define(triple, makeMultiplier(3)),
+
+    print(double(10)),
+    print(triple(10))
+)

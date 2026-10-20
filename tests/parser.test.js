@@ -1,5 +1,5 @@
 const assert = require("node:assert/strict");
-const { parse, parseExpression } = require("./parser.js");
+const { parse, parseExpression } = require("../parser.js");
 
 
 
@@ -267,8 +267,6 @@ testParser(
 
 
 
-
-
 function testSyntaxError(input) {
     assert.throws(
         () => parse(input),
@@ -432,3 +430,11 @@ testSyntaxError("print(42,   )");
 
 // Missing argument after comma and newline
 testSyntaxError("print(42,\n)");
+
+
+
+
+
+
+
+console.log("All tests passed");

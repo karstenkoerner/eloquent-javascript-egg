@@ -11,7 +11,7 @@ An implementation of the Egg programming language from *Eloquent JavaScript*, bu
 
 Egg is a toy programming language used to explore how programming languages are parsed and evaluated.
 
-This implementation is based on the requirements described in *Eloquent JavaScript*, but the implementation is written by me as an exercise in designing the parser and interpreter myself.
+Based on the language specification in Eloquent JavaScript, this interpreter was independently implemented as an exercise in recursive-descent parsing, AST evaluation, and programming language design.
 
 ## Example Code
 
@@ -33,19 +33,31 @@ do(
 
 
 
-## Requirements / Blueprint
+## Architecture
 
 The program consists of two primary systems:
 
 1. **Parser**
    - Accepts Egg source code as text.
    - Parses expressions and function applications.
-   - Produces a structured representation of the program that can be processed by the interpreter.
+   - Produces an abstract syntax tree (AST) representing the program's structure.
 
-2. **Interpreter**
+2. **Evaluator**
    - Takes the structured representation produced by the parser.
    - Evaluates expressions according to the rules of the Egg language.
    - Handles Egg's built-in operations and language constructs.
+   - Manages variable scopes and supports functions that capture their surrounding environment.
+
+
+
+## Testing
+
+The project uses Node.js's built-in assertion library.
+
+```bash
+node tests/parser.test.js
+node tests/evaluator.test.js
+```
 
 
 
@@ -53,5 +65,23 @@ The program consists of two primary systems:
 
 Requires Node.js.
 
+
+Set up the CLI on your local machine:
+
 ```bash
-node <filename>.js
+git clone https://github.com/karstenkoerner/eloquent-javascript-egg.git
+cd eloquent-javascript-egg
+npm link
+```
+
+Run the included example Egg file:
+
+```bash
+egg examples/example.egg
+```
+
+Run your own Egg file:
+
+```bash
+egg <filename>.egg
+```

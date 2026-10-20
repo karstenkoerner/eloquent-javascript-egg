@@ -1,4 +1,5 @@
-
+// Parser currently does not support negative integers, decimals, escaped quotation marks, or comments.
+// May or may not add those features at a later date.
 
 
 
