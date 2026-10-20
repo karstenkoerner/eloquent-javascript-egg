@@ -28,9 +28,6 @@ fun()
 
 */
 
-//TODO: Implement the rest of the built-in special forms.
-//TODO: Write tests for the evaluator.
-
 
 
 function evaluate(expr, scope) {
