@@ -37,8 +37,19 @@ function evaluate(expr, scope) {
     
     if (expr.type === "apply") {
 
+        // do()
+        if (expr.operator.type === "word" && expr.operator.name === "do") {
+            let result = false;
+
+            for (const arg of expr.args) {
+                result = evaluate(arg, scope);
+            }
+
+            return result;
+        }
+
+        // define()
         if (expr.operator.type === "word" && expr.operator.name === "define") {
-            
 
             if (expr.args.length === 2 && expr.args[0].type === "word") {
                 const variableName = expr.args[0].name;
@@ -52,14 +63,67 @@ function evaluate(expr, scope) {
             }
         }
 
-        if (expr.operator.type === "word" && expr.operator.name === "do") {
-            let result = false;
-
-            for (const arg of expr.args) {
-                result = evaluate(arg, scope);
+        // if()
+        if (expr.operator.type === "word" && expr.operator.name === "if") {
+            if (expr.args.length !== 3) {
+                throw new SyntaxError("if() requires exactly 3 arguments");
             }
 
-            return result;
+            const [ condition, thenExpression, elseExpression ] = expr.args;
+            const result = evaluate(condition, scope);
+
+            if (result !== false) {
+                return evaluate(thenExpression, scope);
+            } else {
+                return evaluate(elseExpression, scope);
+            }
+        }
+
+        // while()
+        if (expr.operator.type === "word" && expr.operator.name === "while") {
+            if (expr.args.length !== 2) {
+                throw new SyntaxError("while() requires exactly 2 arguments");
+            }
+
+            const [ condition, expression ] = expr.args;
+            let result = evaluate(condition, scope);
+
+            while (result !== false) {
+                evaluate(expression, scope);
+                result = evaluate(condition, scope);
+            }
+
+            return false;
+        }
+
+        // fun()
+        if (expr.operator.type === "word" && expr.operator.name === "fun") {
+            if (expr.args.length < 1) {
+                throw new SyntaxError("fun() expects at least 1 argument");
+            }
+
+            const parameters = expr.args.slice(0, -1);
+            const body = expr.args[expr.args.length - 1];
+
+            for (const parameter of parameters) {
+                if (parameter.type !== "word") {
+                    throw new SyntaxError("Function parameters must be variable names");
+                }
+            }
+
+            return (...args) => {
+                if (args.length !== parameters.length) {
+                    throw new TypeError("Incorrect number of arguments");
+                }
+
+                const localScope = Object.create(scope);
+
+                for (let i = 0; i < parameters.length; i++) {
+                    localScope[parameters[i].name] = args[i];
+                }
+
+                return evaluate(body, localScope);
+            };
         }
 
         const operator = evaluate(expr.operator, scope);
